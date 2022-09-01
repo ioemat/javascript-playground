@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+<head>
+  <script type="text/javascript">
+    function load_prs(){
+      const request = new XMLHttpRequest();
+      const url = 'https://api.github.com/repos/keycloak/keycloak/pulls?state=open&per_page=400';
+
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() { 
+          if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+          data = JSON.parse(xmlHttp.responseText);        
+          filtered = data.filter(e => e.head.repo.full_name == "bosch-io/keycloak")
+
+          resultHtml = "<h2>PullRequests</h2>"
+          filtered.forEach( item => {
+              resultHtml += "<h3><a href='" + item.html_url + "'>" + item.title + "<a></h3>"
+                            + "<dl>" 
+                            + "<dt>Status</dt><dd>" + item.state + "</dd>"
+                            + "<dt>User</dt><dd>" + item.user.login + "</dd>"
+                            + "</dl>"            
+          })
+          document.getElementById("foo").innerHTML = resultHtml
+      }
+      xmlHttp.open("GET", url, true); 
+      xmlHttp.send(null);
+    }
+  </script>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>IO PRs</title>
+</head>
+
+</head>
+<body onload="load_prs()"><p id="foo">Loading ...</p>
+</body>
